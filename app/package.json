@@ -1,0 +1,21 @@
+{
+  "name": "fastify-mongo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon --exec fastify start app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "fastify": "^1.6.0",
+    "fastify-plugin": "^1.1.2",
+    "fastify-autoload": "^0.4.0",
+    "fastify-cli": "^0.16.4"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.2"
+  }
+}
