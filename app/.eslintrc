@@ -1,0 +1,24 @@
+{
+  "extends": "standard",
+  "plugins": [
+      "standard",
+      "promise",
+      "mocha"
+  ],
+  "rules": {
+    "mocha/no-exclusive-tests": "error",
+    "comma-dangle": [
+      "error",
+      "always-multiline"
+    ],
+    "indent": [
+      "error",
+      2,
+      { "SwitchCase": 1 }
+    ]
+  },
+  "env": {
+    "node": true,
+    "mocha": true
+  }
+}

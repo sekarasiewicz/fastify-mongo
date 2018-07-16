@@ -11,11 +11,19 @@
   "license": "ISC",
   "dependencies": {
     "fastify": "^1.6.0",
-    "fastify-plugin": "^1.1.2",
     "fastify-autoload": "^0.4.0",
-    "fastify-cli": "^0.16.4"
+    "fastify-cli": "^0.16.4",
+    "fastify-plugin": "^1.1.2",
+    "mongodb": "^3.1.1"
   },
   "devDependencies": {
-    "nodemon": "^1.18.2"
+    "nodemon": "^1.18.2",
+    "eslint": "^4.16.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-mocha": "^4.11.0",
+    "eslint-plugin-node": "^5.2.0",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-standard": "^3.0.1"
   }
 }
