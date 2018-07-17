@@ -61,8 +61,17 @@ async function routes (fastify, options) {
     url: '/s',
     schema: {
       body: 'greetings#',
+      response: {
+        200: {
+          type: 'object',
+          properties: {
+            hello: { type: 'string' },
+          },
+        },
+      },
     },
     handler: async (request, reply) => ({ hello: request.body.hello }),
+    // handler: async (request, reply) => reply.send({ hello: request.body.hello }),
   })
 }
 

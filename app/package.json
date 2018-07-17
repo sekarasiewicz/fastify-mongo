@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "nodemon --exec fastify start app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "standard && tap test/*.test.js test/*/*.test.js test/*/*/*.test.js",
+    "dev": "nodemon --exec fastify start -l info -P app.js"
   },
   "author": "",
   "license": "ISC",
