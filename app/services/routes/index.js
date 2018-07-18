@@ -40,7 +40,6 @@ async function routes (fastify, options) {
     },
   }
   fastify.post('/search', opts, async (request, reply) => {
-    console.log(request.body)
     const result = await collection.insertOne({
       text: `Some Value ${request.body.id}`,
       id: request.body.id,
@@ -93,8 +92,20 @@ async function routes (fastify, options) {
     return { id: result._id }
   })
 
+  fastify.post('/signup', async (req, reply) => {
+    const token = fastify.jwt.sign({ ok: 'Yes' })
+    return { token }
+  })
+
   fastify.get('/users', {
     schema: {
+      headers: {
+        type: 'object',
+        properties: {
+          Authorization: { type: 'string' },
+        },
+        required: ['Authorization'],
+      },
       response: {
         200: {
           type: 'array',
