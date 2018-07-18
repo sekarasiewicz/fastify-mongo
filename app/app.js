@@ -14,6 +14,8 @@ module.exports = function (fastify, opts, next) {
     dir: path.join(__dirname, 'models'),
   })
 
+  fastify.register(require('./services/routes/auth'))
+
   fastify.register(AutoLoad, {
     dir: path.join(__dirname, 'services'),
   })

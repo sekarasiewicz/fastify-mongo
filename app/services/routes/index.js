@@ -85,6 +85,7 @@ async function routes (fastify, options) {
           },
           password: { type: 'string' },
         },
+        required: ['email', 'password'],
       },
     },
   }, async (request, reply) => {
@@ -95,6 +96,10 @@ async function routes (fastify, options) {
   fastify.post('/signup', async (req, reply) => {
     const token = fastify.jwt.sign({ ok: 'Yes' })
     return { token }
+  })
+
+  fastify.addHook('preHandler', async (req, res) => {
+    console.log(req)
   })
 
   fastify.get('/users', {
