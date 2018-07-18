@@ -2,6 +2,7 @@
   "watch": [
     "app.js",
     "services",
-    "plugins"
+    "plugins",
+    "models"
   ]
 }

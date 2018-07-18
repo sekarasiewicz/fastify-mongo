@@ -12,6 +12,10 @@ module.exports = function (fastify, opts, next) {
     dir: path.join(__dirname, 'plugins'),
   })
 
+  fastify.register(AutoLoad, {
+    dir: path.join(__dirname, 'models'),
+  })
+
   // This loads all plugins defined in services
   // define your routes in one of these
 

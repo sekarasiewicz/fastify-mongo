@@ -1,8 +1,6 @@
 async function routes (fastify, options) {
-  const database = fastify.mongo.db('test')
-  const collection = database.collection('searchable')
-  const someSupport = fastify.someSupport
-  console.log(someSupport())
+  const mongo = fastify.mongo
+  const collection = mongo.collection('searchable')
 
   fastify.get('/', async (request, reply) => {
     return { hello: 'world' }
@@ -49,6 +47,7 @@ async function routes (fastify, options) {
     })
     return result
   })
+
   fastify.addSchema({
     $id: 'greetings',
     type: 'object',
@@ -56,6 +55,7 @@ async function routes (fastify, options) {
       hello: { type: 'string' },
     },
   })
+
   fastify.route({
     method: 'POST',
     url: '/s',
@@ -73,6 +73,42 @@ async function routes (fastify, options) {
     handler: async (request, reply) => ({ hello: request.body.hello }),
     // handler: async (request, reply) => reply.send({ hello: request.body.hello }),
   })
+  const User = mongo.model('User')
+
+  fastify.post('/register', {
+    schema: {
+      body: {
+        type: 'object',
+        properties: {
+          email: {
+            type: 'string',
+            format: 'email',
+          },
+          password: { type: 'string' },
+        },
+      },
+    },
+  }, async (request, reply) => {
+    const result = await User.create(request.body)
+    return { id: result._id }
+  })
+
+  fastify.get('/users', {
+    schema: {
+      response: {
+        200: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              id: { type: 'string' },
+              email: { type: 'string' },
+            },
+          },
+        },
+      },
+    },
+  }, async (request, reply) => User.find({}))
 }
 
 module.exports = routes

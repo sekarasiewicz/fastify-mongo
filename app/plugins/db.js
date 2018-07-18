@@ -1,12 +1,15 @@
 const fastifyPlugin = require('fastify-plugin')
-const MongoClient = require('mongodb').MongoClient
+const mongoose = require('mongoose')
 
 async function dbConnector (fastify, options) {
   const env = process.env
   const url = `mongodb://${env.DB_USER}:${env.DB_PASS}@mongo:27017/${env.DB_AUTH}`
-  const db = await MongoClient.connect(url, { useNewUrlParser: true })
+  mongoose.connect(url, { useNewUrlParser: true })
 
-  fastify.decorate('mongo', db)
+  const db = mongoose.connection
+  db.on('error', console.error.bind(console, 'connection error:'))
+
+  fastify.decorate('mongo', db.useDb('test'))
 }
 
 module.exports = fastifyPlugin(dbConnector)
