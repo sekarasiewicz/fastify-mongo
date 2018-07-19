@@ -5,6 +5,7 @@ module.exports = function (fastify, opts, next) {
   fastify.register(require('fastify-jwt'), {
     secret: 'supersecret',
   })
+  fastify.register(require('fastify-auth'))
 
   fastify.register(AutoLoad, {
     dir: path.join(__dirname, 'plugins'),

@@ -13,6 +13,8 @@
   "dependencies": {
     "bcrypt": "^3.0.0",
     "fastify": "^1.6.0",
+    "fastify-auth": "^0.3.0",
+    "fastify-jwt": "^0.3.0",
     "fastify-autoload": "^0.4.0",
     "fastify-cli": "^0.16.4",
     "fastify-jwt": "^0.3.0",

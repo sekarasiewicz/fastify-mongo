@@ -1,10 +1,9 @@
 'use strict'
 
-const fastifyPlugin = require('fastify-plugin')
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 
-async function user (fastify, options) {
+module.exports = async (fastify, options) => {
   const db = fastify.mongo
   const UserSchema = new mongoose.Schema({
     email: {
@@ -27,9 +26,5 @@ async function user (fastify, options) {
       console.log(err)
     }
   })
-  const User = db.model('User', UserSchema)
-
-  fastify.decorate('User', User, ['mongo'])
+  db.model('User', UserSchema)
 }
-
-module.exports = fastifyPlugin(user)

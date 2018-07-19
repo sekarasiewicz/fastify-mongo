@@ -28,6 +28,7 @@ async function routes (fastify, options) {
     }
     return result.text
   })
+
   const opts = {
     schema: {
       body: {
@@ -98,8 +99,13 @@ async function routes (fastify, options) {
     return { token }
   })
 
-  fastify.addHook('preHandler', async (req, res) => {
-    console.log(req)
+  fastify.decorate('verifyJWT', async (request, reply, done) => {
+    try {
+      await request.jwtVerify()
+      done()
+    } catch (e) {
+      done(e)
+    }
   })
 
   fastify.get('/users', {
@@ -109,7 +115,7 @@ async function routes (fastify, options) {
         properties: {
           Authorization: { type: 'string' },
         },
-        required: ['Authorization'],
+        // required: ['Authorization'],
       },
       response: {
         200: {
@@ -124,6 +130,7 @@ async function routes (fastify, options) {
         },
       },
     },
+    beforeHandler: fastify.auth([fastify.verifyJWT]),
   }, async (request, reply) => User.find({}))
 }
 
