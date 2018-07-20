@@ -1,10 +1,8 @@
-async function routes (fastify, options) {
-  const mongo = fastify.mongo
-  const collection = mongo.collection('searchable')
+async function routes(fastify) {
+  const { mongo } = fastify;
+  const collection = mongo.collection('searchable');
 
-  fastify.get('/', async (request, reply) => {
-    return { hello: 'world' }
-  })
+  fastify.get('/', async () => ({ hello: 'world' }));
 
   fastify.get('/search/:id', {
     schema: {
@@ -19,15 +17,14 @@ async function routes (fastify, options) {
         excitement: { type: 'integer' },
       },
     },
-  }, async (request, reply) => {
-    console.log('request.querystring', request.query)
-    const result = await collection.findOne({ id: request.params.id })
+  }, async (request) => {
+    const result = await collection.findOne({ id: request.params.id });
 
     if (result.text === null || result.text === undefined) {
-      throw new Error('Invalid value')
+      throw new Error('Invalid value');
     }
-    return result.text
-  })
+    return result.text;
+  });
 
   const opts = {
     schema: {
@@ -39,14 +36,15 @@ async function routes (fastify, options) {
         },
       },
     },
-  }
-  fastify.post('/search', opts, async (request, reply) => {
+  };
+
+  fastify.post('/search', opts, async (request) => {
     const result = await collection.insertOne({
       text: `Some Value ${request.body.id}`,
       id: request.body.id,
-    })
-    return result
-  })
+    });
+    return result;
+  });
 
   fastify.addSchema({
     $id: 'greetings',
@@ -54,7 +52,7 @@ async function routes (fastify, options) {
     properties: {
       hello: { type: 'string' },
     },
-  })
+  });
 
   fastify.route({
     method: 'POST',
@@ -70,10 +68,10 @@ async function routes (fastify, options) {
         },
       },
     },
-    handler: async (request, reply) => ({ hello: request.body.hello }),
+    handler: async request => ({ hello: request.body.hello }),
     // handler: async (request, reply) => reply.send({ hello: request.body.hello }),
-  })
-  const User = mongo.model('User')
+  });
+  const User = mongo.model('User');
 
   fastify.post('/register', {
     schema: {
@@ -89,24 +87,24 @@ async function routes (fastify, options) {
         required: ['email', 'password'],
       },
     },
-  }, async (request, reply) => {
-    const result = await User.create(request.body)
-    return { id: result._id }
-  })
+  }, async (request) => {
+    const result = await User.create(request.body);
+    return { id: result._id };
+  });
 
-  fastify.post('/signup', async (req, reply) => {
-    const token = fastify.jwt.sign({ ok: 'Yes' })
-    return { token }
-  })
+  fastify.post('/signup', async () => {
+    const token = fastify.jwt.sign({ ok: 'Yes' });
+    return { token };
+  });
 
   fastify.decorate('verifyJWT', async (request, reply, done) => {
     try {
-      await request.jwtVerify()
-      done()
+      await request.jwtVerify();
+      done();
     } catch (e) {
-      done(e)
+      done(e);
     }
-  })
+  });
 
   fastify.get('/users', {
     schema: {
@@ -131,7 +129,7 @@ async function routes (fastify, options) {
       },
     },
     beforeHandler: fastify.auth([fastify.verifyJWT]),
-  }, async (request, reply) => User.find({}))
+  }, async () => User.find({}));
 }
 
-module.exports = routes
+module.exports = routes;

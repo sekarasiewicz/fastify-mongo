@@ -1,25 +1,29 @@
-const path = require('path')
-const AutoLoad = require('fastify-autoload')
+const path = require('path');
+const AutoLoad = require('fastify-autoload');
+const fastifyJWT = require('fastify-jwt');
+const fastifyAuth = require('fastify-auth');
 
-module.exports = function (fastify, opts, next) {
-  fastify.register(require('fastify-jwt'), {
+const authRoutes = require('./services/routes/auth');
+
+module.exports = (fastify, opts, next) => {
+  fastify.register(fastifyJWT, {
     secret: 'supersecret',
-  })
-  fastify.register(require('fastify-auth'))
+  });
+  fastify.register(fastifyAuth);
 
   fastify.register(AutoLoad, {
     dir: path.join(__dirname, 'plugins'),
-  })
+  });
 
   fastify.register(AutoLoad, {
     dir: path.join(__dirname, 'models'),
-  })
+  });
 
-  fastify.register(require('./services/routes/auth'))
+  fastify.register(authRoutes);
 
   fastify.register(AutoLoad, {
     dir: path.join(__dirname, 'services'),
-  })
+  });
 
-  next()
-}
+  next();
+};

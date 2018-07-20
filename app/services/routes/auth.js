@@ -1,7 +1,5 @@
-async function auth (fastify, options) {
-  fastify.get('/d', async (request, reply) => {
-    return { hello: 'world' }
-  })
+async function auth(fastify) {
+  fastify.get('/d', async () => ({ hello: 'world' }));
 }
 
-module.exports = auth
+module.exports = auth;
