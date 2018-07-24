@@ -1,8 +1,8 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+const mongoose = require('mongoose')
+const bcrypt = require('bcrypt')
 
 module.exports = async (fastify) => {
-  const { mongo } = fastify;
+  const { mongo } = fastify
   const UserSchema = new mongoose.Schema({
     email: {
       type: String,
@@ -14,15 +14,14 @@ module.exports = async (fastify) => {
       type: String,
       required: true,
     },
-  });
-  UserSchema.pre('save', async (next) => {
+  })
+  UserSchema.pre('save', async function () {
     try {
-      const hash = await bcrypt.hash(this.password, 10);
-      this.password = hash;
-      next();
+      const hash = await bcrypt.hash(this.password, 10)
+      this.password = hash
     } catch (err) {
-      fastify.log(err);
+      throw new Error(`Bcrypt error: ${err}`)
     }
-  });
-  mongo.model('User', UserSchema);
-};
+  })
+  mongo.model('User', UserSchema)
+}

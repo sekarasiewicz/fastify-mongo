@@ -1,8 +1,8 @@
 async function routes(fastify) {
-  const { mongo } = fastify;
-  const collection = mongo.collection('searchable');
+  const { mongo } = fastify
+  const collection = mongo.collection('searchable')
 
-  fastify.get('/', async () => ({ hello: 'world' }));
+  fastify.get('/', async () => ({ hello: 'world' }))
 
   fastify.get('/search/:id', {
     schema: {
@@ -18,13 +18,13 @@ async function routes(fastify) {
       },
     },
   }, async (request) => {
-    const result = await collection.findOne({ id: request.params.id });
+    const result = await collection.findOne({ id: request.params.id })
 
     if (result.text === null || result.text === undefined) {
-      throw new Error('Invalid value');
+      throw new Error('Invalid value')
     }
-    return result.text;
-  });
+    return result.text
+  })
 
   const opts = {
     schema: {
@@ -36,15 +36,15 @@ async function routes(fastify) {
         },
       },
     },
-  };
+  }
 
   fastify.post('/search', opts, async (request) => {
     const result = await collection.insertOne({
       text: `Some Value ${request.body.id}`,
       id: request.body.id,
-    });
-    return result;
-  });
+    })
+    return result
+  })
 
   fastify.addSchema({
     $id: 'greetings',
@@ -52,7 +52,7 @@ async function routes(fastify) {
     properties: {
       hello: { type: 'string' },
     },
-  });
+  })
 
   fastify.route({
     method: 'POST',
@@ -69,9 +69,8 @@ async function routes(fastify) {
       },
     },
     handler: async request => ({ hello: request.body.hello }),
-    // handler: async (request, reply) => reply.send({ hello: request.body.hello }),
-  });
-  const User = mongo.model('User');
+  })
+  const User = mongo.model('User')
 
   fastify.post('/register', {
     schema: {
@@ -87,24 +86,28 @@ async function routes(fastify) {
         required: ['email', 'password'],
       },
     },
-  }, async (request) => {
-    const result = await User.create(request.body);
-    return { id: result._id };
-  });
+  }, async (request, reply) => {
+    try {
+      const result = await User.create(request.body)
+      return { id: result._id }
+    } catch (e) {
+      return reply.code(400).send(e)
+    }
+  })
 
   fastify.post('/signup', async () => {
-    const token = fastify.jwt.sign({ ok: 'Yes' });
-    return { token };
-  });
+    const token = fastify.jwt.sign({ ok: 'Yes' })
+    return { token }
+  })
 
   fastify.decorate('verifyJWT', async (request, reply, done) => {
     try {
-      await request.jwtVerify();
-      done();
+      await request.jwtVerify()
+      done()
     } catch (e) {
-      done(e);
+      done(e)
     }
-  });
+  })
 
   fastify.get('/users', {
     schema: {
@@ -113,7 +116,6 @@ async function routes(fastify) {
         properties: {
           Authorization: { type: 'string' },
         },
-        // required: ['Authorization'],
       },
       response: {
         200: {
@@ -129,7 +131,7 @@ async function routes(fastify) {
       },
     },
     beforeHandler: fastify.auth([fastify.verifyJWT]),
-  }, async () => User.find({}));
+  }, async () => User.find({}))
 }
 
-module.exports = routes;
+module.exports = routes

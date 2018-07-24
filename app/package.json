@@ -4,9 +4,9 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon --exec fastify start app.js",
+    "start": "nodemon --exec 'fastify start app.js'",
     "test": "standard && tap test/*.test.js test/*/*.test.js test/*/*/*.test.js",
-    "dev": "nodemon --exec fastify start -l info -P app.js"
+    "dev": "nodemon --exec 'fastify start -P -l info app.js'"
   },
   "author": "",
   "license": "ISC",

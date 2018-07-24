@@ -2,7 +2,9 @@
   "extends": "airbnb-base",
   "rules": {
     "max-len": [2, {"code": 120 }],
-    "no-underscore-dangle": ["error", { "allow": ["_id"] }]
+    "no-underscore-dangle": ["error", { "allow": ["_id"] }],
+    "semi": ["error", "never"],
+    "func-names": ["error", "never"]
   },
   "env": {
     "node": true,
